@@ -1,0 +1,16 @@
+Description: Let the user's CFLAGS override ours, so they can change the -O level.
+Author: Ted Percival <ted@midg3t.net>
+Forwarded: no
+Last-Update: 2011-11-14
+
+--- a/configure
++++ b/configure
+@@ -75,7 +75,7 @@
+ echo $CC
+ 
+ echo -n Looking for compiler flags...
+-CFLAGS="${CFLAGS:--Wall -Wmissing-declarations} $OPTFLAGS"
++CFLAGS="$OPTFLAGS ${CFLAGS:--Wall -Wmissing-declarations}"
+ echo $CFLAGS
+ 
+ echo -n Looking for xmlto...

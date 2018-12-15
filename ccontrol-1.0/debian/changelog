@@ -1,0 +1,120 @@
+ccontrol (1.0-2) unstable; urgency=medium
+
+  * QA upload.
+  * Comment out the VCS fields -- no way to fetch the ancient repository.
+  * Use compat 10.
+  * Turn on gcc colored diagnostics.
+  * Fix gperf prototypes. Closes: #869593.
+
+ -- Adam Borowski <kilobyte@angband.pl>  Tue, 25 Jul 2017 04:02:29 +0200
+
+ccontrol (1.0-1) unstable; urgency=low
+
+  * QA upload.
+    + Set maintainer to Debian QA Group (see #574013).
+  * New upstream release.
+  * Don't use python-central; it was needed only to generate dependency on
+    python (closes: #616774). Thanks to Matthias Klose for the bug report.
+    + Remove python-central from Build-Depends.
+    + Remove dh_pycentral call from debian/rules.
+    + Use explicit ‘python’ dependency instead of ${python:Depends}.
+    + Remove X{S,B}-Python-Version fields.
+  * Move python to Recommends. Add python-gtk2 and python-eggtrayicon to
+    Recommends, as they are needed to run GUI (closes: #645054). Thanks to
+    David Gibson for the bug report.
+  * Convert to source format 3.0 (quilt).
+    + Add debian/source/format.
+    + Remove explicit patching code from debian/rules.
+    + Remove quilt from Build-Depends.
+    + Refresh patches so that they apply without fuzz.
+  * Remove unused lintian overrides.
+  * Strip XS- prefix from Vcs-* fields.
+  + Bump standards version to 3.9.2.
+    + Use filter (not findstring) to parse DEB_BUILD_OPTIONS.
+  * Replace ‘(C)’ with ‘©’ in the copyright file.
+  * Improve debian/rules:
+    + Add build-arch and build-indep targets.
+    + Add ‘set -e’ to for loops.
+    + Use $() construct instead of backticks.
+    + Remove unused variables.
+    + Drop work-around for a bug in DocBook XSL that was fixed long ago.
+    + Write a policy-compliant get-orig-source target.
+  * Bump debhelper compatibility level to 7.
+    + Update debian/compat.
+    + Update Build-Depends.
+    + Use dh_prep instead of dh_clean -k.
+  * Pass CFLAGS, CPPFLAGS and LDFLAGS (acquired from dpkg-buildflags) to the
+    build system.
+    + Build depend on dpkg-dev (>= 1.15.7).
+    + Update debian/rules.
+    + Patch configure stript to allow CFLAGS with embedded commas.
+  * Remove unused dependency on autotools-dev.
+  * Remove code to build orig tarballs from the VCS.
+  * Write DEP-3 patch headers.
+  * Add patch to add missing includes.
+  * Drop the no-man-copyright-symbol patch, no longer needed.
+  * Update GCC version numbers; use 4.4, 4.5, 4.6.
+
+ -- Jakub Wilk <jwilk@debian.org>  Sun, 27 Nov 2011 12:19:11 +0100
+
+ccontrol (0.9.1+20071204-2) unstable; urgency=low
+
+  * Fix execution of commands with absolute paths (closes: #455446).
+  * Break a dependency loop between config.status and configure in
+    debian/rules.
+
+ -- Ted Percival <ted@midg3t.net>  Sun, 20 Jan 2008 12:04:39 +0000
+
+ccontrol (0.9.1+20071204-1) unstable; urgency=low
+
+  * New upstream snapshot.
+  * Separate all changes into patch files.
+  * Add support for finding commands by directory rather than being named
+    explicitly (Closes: #447832)
+  * Dynamically link glibc instead of statically linking dietlibc to ease
+    security support.
+  * Remove symlink for gcc-2.95 and add symlink for gcc-4.3.
+  * Moved package Homepage into its own header.
+  * Update to Standards-Version 3.7.3.0.
+  * Clarify GPL version in copyright file.
+
+ -- Ted Percival <ted@midg3t.net>  Fri, 07 Dec 2007 13:18:23 +0000
+
+ccontrol (0.9.1+20060806-4) unstable; urgency=low
+
+  * Force-disable GCC stack protection as it is incompatible with the
+    current dietlibc (Ubuntu #109157).
+  * Don't ignore errors in $(MAKE) distclean.
+
+ -- Ted Percival <ted@midg3t.net>  Sun, 26 Aug 2007 12:28:30 +1000
+
+ccontrol (0.9.1+20060806-3) unstable; urgency=low
+
+  [debian/control]
+  * Update Standards-Version to 3.7.2.2. No changes.
+  * Move distcc from Recommends to Suggests.
+  * Use proper indentation of Homepage pseudo-field.
+  * Use official VCS headers.
+  * Update VCS location.
+
+  [debian/rules]
+  * Don't create symlinks for gcc-4.0 as it is no longer available.
+
+ -- Ted Percival <ted@midg3t.net>  Sat, 04 Aug 2007 17:15:56 +1000
+
+ccontrol (0.9.1+20060806-2) unstable; urgency=low
+
+  * Create correct symlinks for cross-compiled packages.
+  * Change distcc from "Depends" to "Recommends".
+  * Only use dietlibc on architectures where it is available. Fixes FTBFS on
+    m68k.
+  * Update to Debian Python Policy 0.4.1.0.
+  * Fix ".sp" showing up in manpages instead of paragraph breaks.
+
+ -- Ted Percival <ted@midg3t.net>  Fri, 13 Oct 2006 02:38:24 +1000
+
+ccontrol (0.9.1+20060806-1) unstable; urgency=low
+
+  * Initial release (Closes: #379126)
+
+ -- Ted Percival <ted@midg3t.net>  Tue, 04 Dec 2007 11:07:44 +0000

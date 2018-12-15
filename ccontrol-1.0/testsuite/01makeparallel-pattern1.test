@@ -1,0 +1,6 @@
+# ARGS pattern1
+# NAME make
+# EXEC /usr/bin/my-make pattern1
+[*]
+	no-parallel = pattern1 *x*
+	make = /usr/bin/my-make

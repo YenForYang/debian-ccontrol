@@ -1,0 +1,7 @@
+# ARGS hello world
+# NAME /usr/bin/cc
+# EXEC /tmp/ccontrol-test/bin/my-gcc hello world
+# FIXME: Test more than parsing.
+[*]
+	nice = 20
+	cc = ~/bin/my-gcc

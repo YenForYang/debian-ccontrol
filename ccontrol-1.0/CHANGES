@@ -1,0 +1,81 @@
+Changes for 1.0
+---------------
+Configuration language changes:
+	- config file now called ~/.ccontrol/config not default
+	- '= off' now replaced with 'disable', can be used in more places
+	- 'parallel' keyword gone: use 'no-parallel disable'
+	- 'no-parallel' by itself no longer valid, use 'no-parallel = *'
+	- 'nice' keyword to change priority
+	- 'lock-file' keyword to have some builds not block others.
+	- Paths (include, distcc, etc) expand ~ so you can use "~/bin/gcc".
+	- Unknown argv[0] is passed through, so you can ccontrol anything.
+	
+
+Changes for 0.9
+---------------
+New features:
+	- Gnome panel control-area applet which sets symlink
+
+Other changes:
+	- Fix PowerPC (and other?) locking (patch from Tony Breeds)
+	- Intercept ccache misses, so we don't have to guess chance of hit
+	- Fix error reporting (also patched by Olof Johansson)
+
+Changes for 0.8
+---------------
+Other changes:
+	- fix bug where all complations done at once if distcc failed.
+	- invoking ccontrol by itself gives current settings.
+	- invoking ccontrol -V/--version gives current version.
+	- debian packaging
+	- fix bug where ccontrol didn't reread config file when re-symlinked
+
+Changes for 0.7
+---------------
+Configuration language changes:
+	- "add make" to add makefile arguments (eg. for cross-compiling).
+
+Other changes:
+	- ccontrol can now be invoked with --section= for special effects.
+	- Faster response to config changes if distcc fails.
+	- Examples and troubleshooting in documentation
+
+Changes for 0.6
+---------------
+Configuration language changes:
+	- distc++-hosts for c++ compiles (defaults to distcc-hosts)
+	- parallel keyword to override no-parallel
+	- distcc only used if distcc-hosts/distc++-hosts set
+
+Other changes:
+	- toplevel make now shouldn't queue behind other makes.
+
+Changes for 0.5
+---------------
+Configuration language changes:
+	- off keyword for distcc and ccache to turn them off locally
+
+Other changes:
+	- ccontrol: "cannot decrement semaphore" fixed: support multiple users.
+	- distcc: detect when distcc is failing, don't flood localhost.
+	- documentation: fix cpus entry in ccontrol(1)
+	- ccontrol-init: human names, fix some failure cases
+	- ccache: don't limit distcc so hard when ccache enabled
+	- install: create directories if necessary
+
+Changes for 0.4
+---------------
+IMPORTANT: Configuration language changes:
+
+	- "parallel" renamed to "cpus" (other was confusing)
+
+	- "[global]" must be replaced by "[*]": we now process *every*
+	  matching section, in order.
+
+Other changes:
+	ccontrol-init: better handling for probing distcc hosts
+	configuration: "include" keyword for including files
+	documentation: clarifications, hacking advice, license
+	distribution: include .hg dir to help users become developers
+	users: ccontrol now has a second user (and developer)
+	

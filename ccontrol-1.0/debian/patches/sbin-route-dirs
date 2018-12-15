@@ -1,0 +1,16 @@
+Description: Ensure that common ‘sbin’ directories are searched for ‘route’.
+Author: Ted Percival <ted@midg3t.net>
+Forwarded: no
+Last-Update: 2011-11-14
+
+--- a/ccontrol-init
++++ b/ccontrol-init
+@@ -46,6 +46,8 @@
+ 
+ scan_for_distcc()
+ {
++    local PATH
++    PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin
+     NET=`route -n | grep '^[123456789]' | awk '{print $1}' | head -1`
+     case "$NET" in
+ 	[123456789]*.0)

@@ -1,0 +1,18 @@
+Package: ccontrol
+Version: 1.0-2
+Architecture: amd64
+Maintainer: Debian QA Group <packages@qa.debian.org>
+Installed-Size: 192
+Depends: libc6 (>= 2.14), gcc, make, binutils, ccache
+Recommends: python, python-gtk2, python-eggtrayicon
+Suggests: distcc
+Section: devel
+Priority: optional
+Homepage: http://ccontrol.ozlabs.org/
+Description: Compilation controller
+ The ccontrol program takes over the roles of the compiler, linker and
+ make, and reads a configuration file to decide what to do before
+ invoking them. This is particularly useful for centralized control over
+ commands and options, such as enabling distcc and ccache. It is also
+ great for controlling parallelism and which compiler versions to use,
+ based on the directory and make targets.

@@ -1,0 +1,7 @@
+# ARGS world
+# NAME gcc
+# EXEC TESTING1='100' TESTING2='200' /usr/bin/my-gcc world
+[*]
+	cc = /usr/bin/my-gcc
+	add env = TESTING1=100
+	add env = TESTING2=200

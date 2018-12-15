@@ -1,0 +1,5 @@
+# ARGS hello world
+# NAME gcc
+# EXEC /usr/bin/my-gcc hello world
+[*]
+	cc = /usr/bin/my-gcc

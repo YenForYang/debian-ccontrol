@@ -1,0 +1,3 @@
+ccontrol-dbgsym_1.0-2_amd64.deb debug optional automatic=yes
+ccontrol_1.0-2_amd64.buildinfo devel optional
+ccontrol_1.0-2_amd64.deb devel optional

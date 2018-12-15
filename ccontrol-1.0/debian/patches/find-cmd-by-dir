@@ -1,0 +1,176 @@
+Description: Add support for finding commands by directory rather than being named explicitly.
+ Add the ability to specify that a command shall be found in a directory and
+ let ccontrol choose the actual program to execute depending on its invocation.
+ . 
+ This means having multiple versions of tools such as the compiler can exist
+ under different names, and ccontrol will execute the right one.
+ .
+ It also updates ccontrol-init to specify enclosing directories by default
+ because otherwise no-one will find this functionality.
+Author: Ted Percival <ted@midg3t.net>
+Bug-Debian: http://bugs.debian.org/447832
+Last-Update: 2011-11-14
+
+--- a/ccontrol.1.txt
++++ b/ccontrol.1.txt
+@@ -74,37 +74,38 @@
+ will end in a "*" to include all subdirectories.
+ 
+ All paths beginning with "~" are relative to the user's home
+-directory.
++directory. A path may be specified as a directory, in which case
++ccontrol will append the program name to the directory.
+ 
+ The following settings are available:
+ 
+ cc::
+-  Followed by '=' specifies the full path of the compiler to be
++  Followed by '=' specifies the path of the compiler to be
+   invoked when ccontrol is invoked as "cc" or "gcc".  ccontrol will
+   fail to compile C programs if this is not set.
+ 
+ c++::
+-  Followed by '=' specifies the full path of the compiler to be
++  Followed by '=' specifies the path of the compiler to be
+   invoked when ccontrol is invoked as "c++" or "g++".  ccontrol will
+   fail to compile C++ programs if this is not set.
+ 
+ ld::
+-  Followed by '=' specifies the full path of the linker to be invoked
++  Followed by '=' specifies the path of the linker to be invoked
+   when ccontrol is invoked as "ld".  ccontrol will fail to link
+   programs if this is not set.
+ 
+ make::
+-  Followed by '=' specifies the full path of the binary to be invoked
++  Followed by '=' specifies the path of the binary to be invoked
+   when ccontrol is invoked as "make".  ccontrol will fail to make if
+   this is not set.
+ 
+ ccache::
+-  Followed by '=' specifies the full path of "ccache", and indicates
++  Followed by '=' specifies the path of "ccache", and indicates
+   that ccache is to be used where appropriate.  If followed by
+   'disable', or not set, ccache will not be used.
+ 
+ distcc::
+-  Followed by '=' specifies the full path of "distcc", and indicates
++  Followed by '=' specifies the path of "distcc", and indicates
+   that distcc is to be used where appropriate.  If followed by
+   'disable', or not set, or distcc-hosts is not set, distcc will not
+   be used.
+--- a/ccontrol.c
++++ b/ccontrol.c
+@@ -352,6 +352,14 @@
+ 
+ 	/* This handles open failure if fd < 0. */
+ 	sec = read_config(configname, dirname, fd);
++
++    /* Ensure we exec the right command */
++    {
++        char *cmd = resolve_path(sec.names[type], argv[0]);
++        free(sec.names[type]);
++        sec.names[type] = cmd;
++    }
++
+ 	fstat(fd, &st);
+ 
+ 	/* Run low priority; people like to use apps while compiling. */
+--- a/ccontrol-init
++++ b/ccontrol-init
+@@ -24,7 +24,7 @@
+     else
+ 	echo Found "$ANS" >&2
+     fi
+-    echo $ANS
++    echo `dirname $ANS`
+ }
+ 
+ test_net()
+--- a/ccontrol.h
++++ b/ccontrol.h
+@@ -72,6 +72,7 @@
+ 
+ /* ccontrol-parse.c */
+ struct section read_config(const char *configname, const char *dir, int fd);
++char *resolve_path(const char *configured_path, const char *cmdname);
+ 
+ /* ccontrol-lock.c */
+ typedef void (*undofn_t)(void);
+--- a/ccontrol-parse.c
++++ b/ccontrol-parse.c
+@@ -5,6 +5,8 @@
+ #include <fnmatch.h>
+ #include <fcntl.h>
+ #include <errno.h>
++#include <sys/types.h>
++#include <sys/stat.h>
+ #include "stdrusty.h"
+ 
+ enum token_type {
+@@ -228,6 +230,44 @@
+ 	return num;
+ }
+ 
++/**
++ * Given a path and command name, returns the name of the file that
++ * should be 'exec'ed. If the path is a directory, the command name
++ * is appended. If it is an executable file, that is returned. If
++ * the path is not absolute, it is returned as-is.
++ *
++ * All return values are 'malloc'ed strings.
++ * On error, a copy of the configured_path is returned.
++ */
++char *resolve_path(const char *configured_path, const char *cmdname)
++{
++    struct stat st;
++    const char *basename;
++    char *execcmd;
++
++    if (configured_path[0] != '/'
++            || stat(configured_path, &st) == -1
++            || !S_ISDIR(st.st_mode))
++        return strdup(configured_path);
++
++    basename = strrchr(cmdname, '/');
++    if (basename)
++        ++basename;
++    else
++        basename = cmdname;
++
++    execcmd = malloc(strlen(configured_path) + strlen(basename) + 2);
++    if (!execcmd)
++        fatal("Cannot allocate memory for command", errno);
++
++    /* +1 to include the NUL byte */
++    memcpy(execcmd, configured_path, strlen(configured_path) + 1);
++    strcat(execcmd, "/");
++    strcat(execcmd, basename);
++
++    return execcmd;
++}
++
+ /* '=' <path> */
+ static char *get_path(struct string *data)
+ {
+@@ -510,6 +550,20 @@
+ 		}
+ 	}
+ 
++    /* Resolve ccache */
++    if (result->ccache) {
++        char *rawccache = result->ccache;
++        result->ccache = resolve_path(result->ccache, "ccache");
++        free(rawccache);
++    }
++
++    /* Resolve distcc */
++    if (result->distcc) {
++        char *rawdistcc = result->distcc;
++        result->distcc = resolve_path(result->distcc, "distcc");
++        free(rawdistcc);
++    }
++
+ 	free(data.start_of_file);
+ }
+ 

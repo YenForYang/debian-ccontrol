@@ -1,0 +1,23 @@
+# NAME ccontrol
+# ARGS --section=test2
+# EXEC \[test2\]
+# EXEC 	cc = /usr/bin/my-gcc
+# EXEC 	c++ = /usr/bin/my-c++
+# EXEC 	make = /usr/bin/my-make
+# EXEC 	ld = /usr/bin/my-ld
+# EXEC 	ccache = /usr/bin/my-ccache
+# EXEC 	distcc = /usr/bin/my-distcc
+# EXEC 	distcc-hosts = my distcc hosts
+# EXEC 	distc++-hosts = my distc++ hosts
+
+[*]
+	cc = /usr/bin/my-gcc
+	c++ = /usr/bin/my-c++
+	ld = /usr/bin/my-ld
+	make = /usr/bin/my-make
+	ccache = /usr/bin/my-ccache
+
+[test2]
+	distcc = /usr/bin/my-distcc
+	distcc-hosts = my distcc hosts
+	distc++-hosts = my distc++ hosts

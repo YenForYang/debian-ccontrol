@@ -1,0 +1,7 @@
+# ARGS hello world
+# NAME /usr/bin/gcc
+# EXEC /usr/bin/my-gcc hello world
+# FIXME: Doesn't actually check cpus are used.
+[*]
+	cpus = 10
+	cc = /usr/bin/my-gcc

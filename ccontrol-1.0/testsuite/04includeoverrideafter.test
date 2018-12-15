@@ -1,0 +1,6 @@
+# ARGS hello world
+# NAME /usr/bin/cc
+# EXEC /usr/bin/my-gcc-included hello world
+[*]
+	cc = /usr/bin/my-gcc-initial
+include = testsuite/04include.include

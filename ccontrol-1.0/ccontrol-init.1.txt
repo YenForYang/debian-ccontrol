@@ -1,0 +1,34 @@
+CCONTROL-INIT(1)
+================
+Rusty Russell <rusty@rustcorp.com.au>
+v0.3, 17 September 2005
+
+NAME
+----
+ccontrol-init - initialize ccontrol setup
+
+SYNOPSIS
+--------
+'ccontrol-init' [file]
+
+DESCRIPTION
+-----------
+The ccontrol-init(1) program creates a sensible default configuration
+file for ccontrol, and then installs ccontrol in your $HOME/bin
+directory if you have one (otherwise, you can simply put
+/usr/lib/ccontrol early in your path).  If no filename is specified on
+the command line, $HOME/.ccontrol/default is used.
+
+If $DISTCC_HOSTS is set, then that is used as the distcc host list,
+otherwise a simple scan of the local network is attempted to find
+likely hosts.
+
+AUTHOR
+------
+Written by Rusty Russell <rusty@rustcorp.com.au>
+
+LICENSE
+-------
+Copyright (C) 2005 Rusty Russell.  Free use of this software is
+granted under the terms of the GNU General Public License (GPL).
+

@@ -1,0 +1,5 @@
+# NAME ccontrol
+# EXEC \[/*\]
+# EXEC 	cc = /usr/bin/my-gcc
+[*]
+	cc = /usr/bin/my-gcc

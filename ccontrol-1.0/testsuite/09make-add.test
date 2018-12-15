@@ -1,0 +1,7 @@
+# ARGS world
+# NAME make
+# EXEC /usr/bin/my-make ARG1=1 ARG2=2 -j20 world
+[*]
+	make = /usr/bin/my-make
+	add make = ARG1=1
+	add make = ARG2=2

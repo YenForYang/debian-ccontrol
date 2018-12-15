@@ -1,0 +1,3 @@
+# NAME ccontrol
+# ARGS --version
+# EXEC *version 1.0 (David Gibson)

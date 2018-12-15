@@ -1,0 +1,9 @@
+# ARGS --section=magicpath gcc hello world
+# NAME ccontrol
+# EXEC /usr/bin/some-other-gcc hello world
+[/*]
+	cc = /usr/bin/my-gcc
+
+# This can never be a real path, since it's relative.
+[magicpath]
+	cc = /usr/bin/some-other-gcc

@@ -1,0 +1,22 @@
+# ARGS -c -o hello.o world.c
+# NAME /usr/bin/gcc
+# EXEC /usr/bin/my-gcc -c -o hello.o world.c
+[*]
+	cc = /usr/bin/my-gcc
+	distcc = /usr/bin/distcc
+	ccache = /usr/bin/ccache
+	distcc-hosts = snab/4 fort/6
+	distc++-hosts = snab/4 fort/6
+	no-parallel = check *foo
+	add make = MAKE=1
+	add env = ENVVAR=1
+
+[/*]
+	distcc disable
+	ccache disable
+	distc++-hosts disable
+	distcc-hosts disable
+	no-parallel disable
+	add make disable
+	add env disable
+

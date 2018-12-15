@@ -1,0 +1,6 @@
+# ARGS thing-with-x-in-it
+# NAME make
+# EXEC /usr/bin/my-make thing-with-x-in-it
+[*]
+	no-parallel = pattern1 *x*
+	make = /usr/bin/my-make

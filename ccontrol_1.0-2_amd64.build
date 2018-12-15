@@ -1,0 +1,174 @@
+ dpkg-buildpackage -D -us -uc -ui -b -Jauto -Pnobiarch,nocheck,nodoc
+dpkg-buildpackage: info: source package ccontrol
+dpkg-buildpackage: info: source version 1.0-2
+dpkg-buildpackage: info: source distribution unstable
+dpkg-buildpackage: info: source changed by Adam Borowski <kilobyte@angband.pl>
+ dpkg-source --before-build .
+dpkg-buildpackage: info: host architecture amd64
+ fakeroot debian/rules clean
+dh_testdir
+dh_testroot
+rm -f build-stamp
+/usr/bin/make distclean
+make[1]: Entering directory '/tmp/ccontrol/ccontrol-1.0'
+rm -f *.o ccontrol ccontrol_test
+rm -f Makefile config.status ccontrol.1 ccontrol-init.1
+make[1]: Leaving directory '/tmp/ccontrol/ccontrol-1.0'
+rm -f gui/gccontrol.1
+set -e; for f in $(find . -name '*.in'); do \
+	rm -f $(echo $f | sed 's/\.in$//'); \
+done
+set -e; for f in $(find . -name '*.gperf'); do \
+	rm -f $(echo $f | sed 's/\.gperf$/.c/'); \
+done
+dh_clean
+FAKEROOTKEY=275488393 LD_LIBRARY_PATH=:/opt/intel/lib/intel64_lin:/opt/intel/tbb/lib/intel64/gcc4.7 LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libfakeroot/libfakeroot-sysv.so debian/rules clean
+ debian/rules build
+dh_testdir
+CFLAGS="-Wall -g -O2 -fdebug-prefix-map=/tmp/ccontrol/ccontrol-1.0=. -Wformat -march=native -pipe -fstack-security-check -Wformat-security -Wdate-time -D_FORTIFY_SOURCE=2 -Wl,-z,relro -Wl,--as-needed,--gc-sections,--relax -fdiagnostics-color=always" ./configure \
+	--bindir=/usr/bin \
+	--libdir=/usr/lib/ccontrol \
+	--datadir=/usr/share/ccontrol \
+	--mandir=/usr/share/man \
+	--disable-dietlibc
+Looking for compiler...icc
+Looking for compiler flags...-O3 -Wall -g -O2 -fdebug-prefix-map=/tmp/ccontrol/ccontrol-1.0=. -Wformat -march=native -pipe -fstack-security-check -Wformat-security -Wdate-time -D_FORTIFY_SOURCE=2 -Wl,-z,relro -Wl,--as-needed,--gc-sections,--relax -fdiagnostics-color=always
+Looking for xmlto.../usr/bin/xmlto
+Looking for asciidoc.../usr/bin/asciidoc
+Configuration complete. Type "make" to build.
+dh_testdir
+xsltproc -o gui/gccontrol.1 --nonet /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/manpages/docbook.xsl debian/gccontrol.1.xml
+Note: meta source : no *info/productname or alternative            gccontrol
+Note: meta source : see http://docbook.sf.net/el/productname       gccontrol
+Note: meta source : no refentry/refmeta/refmiscinfo@class=source   gccontrol
+Note: meta source : see http://docbook.sf.net/el/refmiscinfo       gccontrol
+Note: meta version: no *info/productnumber or alternative          gccontrol
+Note: meta version: see http://docbook.sf.net/el/productnumber     gccontrol
+Note: meta version: no refentry/refmeta/refmiscinfo@class=version  gccontrol
+Note: meta version: see http://docbook.sf.net/el/refmiscinfo       gccontrol
+Warn: meta source : no fallback for source, so inserted a fixme    gccontrol
+Note: meta manual : no titled ancestor of refentry                 gccontrol
+Note: meta manual : no refentry/refmeta/refmiscinfo@class=manual   gccontrol
+Note: meta manual : see http://docbook.sf.net/el/refmiscinfo       gccontrol
+Warn: meta manual : no fallback for manual, so inserted a fixme    gccontrol
+Note: Writing gccontrol.1
+dh_testdir
+/usr/bin/make
+make[1]: Entering directory '/tmp/ccontrol/ccontrol-1.0'
+gperf extensions.gperf > extensions.c
+gperf keywords.gperf > keywords.c
+/usr/bin/asciidoc -d manpage -b docbook ccontrol.1.txt
+/usr/bin/xmlto man ccontrol.1.xml
+Warn: AUTHOR sect.: no personblurb|contrib for Rusty Russell       ccontrol
+Note: AUTHOR sect.: see http://docbook.sf.net/el/contrib           ccontrol
+Note: AUTHOR sect.: see http://docbook.sf.net/el/personblurb       ccontrol
+Note: Writing ccontrol.1
+icc -O3 -Wall -g -O2 -fdebug-prefix-map=/tmp/ccontrol/ccontrol-1.0=. -Wformat -march=native -pipe -fstack-security-check -Wformat-security -Wdate-time -D_FORTIFY_SOURCE=2 -Wl,-z,relro -Wl,--as-needed,--gc-sections,--relax -fdiagnostics-color=always -DVERSION='"1.0 (David Gibson)"' -o ccontrol ccontrol.c ccontrol-parse.c ccontrol-lock.c ccontrol-identify.c stdrusty.c
+ccontrol.c(27): warning #2218: result of call is not used
+  	write(fd, str, strlen(str));
+  	^
+
+ccontrol.c(325): warning #2218: result of call is not used
+  	getcwd(dirname, sizeof(dirname));
+  	^
+
+stdrusty.c(45): warning #2218: result of call is not used
+  	write(STDERR_FILENO, "ccontrol error: ", strlen("ccontrol error: "));
+  	^
+
+stdrusty.c(46): warning #2218: result of call is not used
+  	write(STDERR_FILENO, msg, strlen(msg));
+  	^
+
+stdrusty.c(50): warning #2218: result of call is not used
+  		write(STDERR_FILENO, str, strlen(str));
+  		^
+
+stdrusty.c(54): warning #2218: result of call is not used
+  		write(STDERR_FILENO, ": ", strlen(": "));
+  		^
+
+stdrusty.c(55): warning #2218: result of call is not used
+  		write(STDERR_FILENO, str, strlen(str));
+  		^
+
+stdrusty.c(57): warning #2218: result of call is not used
+  	write(STDERR_FILENO, "\n", 1);
+  	^
+
+rm ccontrol.1.xml
+make[1]: Leaving directory '/tmp/ccontrol/ccontrol-1.0'
+touch build-stamp
+ fakeroot debian/rules binary
+dh_testdir
+dh_testroot
+dh_prep
+dh_installdirs
+/usr/bin/make install prefix=/tmp/ccontrol/ccontrol-1.0/debian/ccontrol
+make[1]: Entering directory '/tmp/ccontrol/ccontrol-1.0'
+mkdir -p /tmp/ccontrol/ccontrol-1.0/debian/ccontrol/usr/bin
+cp ccontrol /tmp/ccontrol/ccontrol-1.0/debian/ccontrol/usr/bin/ccontrol.tmp && mv /tmp/ccontrol/ccontrol-1.0/debian/ccontrol/usr/bin/ccontrol.tmp /tmp/ccontrol/ccontrol-1.0/debian/ccontrol/usr/bin/ccontrol
+cp ccontrol-init /tmp/ccontrol/ccontrol-1.0/debian/ccontrol/usr/bin/ccontrol-init
+ln -sf /usr/bin/ccontrol /tmp/ccontrol/ccontrol-1.0/debian/ccontrol/usr/lib/ccontrol/gcc
+ln -sf /usr/bin/ccontrol /tmp/ccontrol/ccontrol-1.0/debian/ccontrol/usr/lib/ccontrol/cc
+ln -sf /usr/bin/ccontrol /tmp/ccontrol/ccontrol-1.0/debian/ccontrol/usr/lib/ccontrol/g++
+ln -sf /usr/bin/ccontrol /tmp/ccontrol/ccontrol-1.0/debian/ccontrol/usr/lib/ccontrol/c++
+ln -sf /usr/bin/ccontrol /tmp/ccontrol/ccontrol-1.0/debian/ccontrol/usr/lib/ccontrol/ld
+ln -sf /usr/bin/ccontrol /tmp/ccontrol/ccontrol-1.0/debian/ccontrol/usr/lib/ccontrol/make
+cp ccontrol.1 /tmp/ccontrol/ccontrol-1.0/debian/ccontrol/usr/share/man/man1/ccontrol.1
+/usr/bin/asciidoc -d manpage -b docbook ccontrol-init.1.txt
+/usr/bin/xmlto man ccontrol-init.1.xml
+Warn: AUTHOR sect.: no personblurb|contrib for Rusty Russell       ccontrol-init
+Note: AUTHOR sect.: see http://docbook.sf.net/el/contrib           ccontrol-init
+Note: AUTHOR sect.: see http://docbook.sf.net/el/personblurb       ccontrol-init
+Note: Writing ccontrol-init.1
+cp ccontrol-init.1 /tmp/ccontrol/ccontrol-1.0/debian/ccontrol/usr/share/man/man1/ccontrol-init.1
+mkdir -p /tmp/ccontrol/ccontrol-1.0/debian/ccontrol/usr/share/ccontrol
+cp gui/ccontrol-key.png /tmp/ccontrol/ccontrol-1.0/debian/ccontrol/usr/share/ccontrol/ccontrol-key.png
+cp gui/gccontrol.py /tmp/ccontrol/ccontrol-1.0/debian/ccontrol/usr/bin/gccontrol.py
+rm ccontrol-init.1.xml
+make[1]: Leaving directory '/tmp/ccontrol/ccontrol-1.0'
+cp /tmp/ccontrol/ccontrol-1.0/gui/gccontrol.1 /tmp/ccontrol/ccontrol-1.0/debian/ccontrol/usr/share/man/man1
+# Massive compiler linkage copied almost verbatim from ccache packaging,
+# Copyright 2002 Paul Russell <prussell@debian.org>
+ln -s ../../bin/ccontrol /tmp/ccontrol/ccontrol-1.0/debian/ccontrol/usr/lib/ccontrol/x86_64-linux-gnu-gcc
+ln -s ../../bin/ccontrol /tmp/ccontrol/ccontrol-1.0/debian/ccontrol/usr/lib/ccontrol/x86_64-linux-gnu-g++
+set -e; for ver in 4.4 4.5 4.6; do \
+	ln -s ../../bin/ccontrol /tmp/ccontrol/ccontrol-1.0/debian/ccontrol/usr/lib/ccontrol/x86_64-linux-gnu-gcc-$ver; \
+	ln -s ../../bin/ccontrol /tmp/ccontrol/ccontrol-1.0/debian/ccontrol/usr/lib/ccontrol/gcc-$ver; \
+	ln -s ../../bin/ccontrol /tmp/ccontrol/ccontrol-1.0/debian/ccontrol/usr/lib/ccontrol/x86_64-linux-gnu-g++-$ver; \
+	ln -s ../../bin/ccontrol /tmp/ccontrol/ccontrol-1.0/debian/ccontrol/usr/lib/ccontrol/g++-$ver; \
+done
+mv debian/ccontrol/usr/bin/gccontrol.py debian/ccontrol/usr/bin/gccontrol
+dh_testdir
+dh_testroot
+dh_installchangelogs CHANGES
+dh_installdocs
+dh_installexamples
+dh_installman
+dh_link
+dh_strip
+dh_compress
+dh_fixperms
+dh_installdeb
+dh_shlibdeps
+dpkg-shlibdeps: warning: deprecated use of LD_LIBRARY_PATH with private library directory which interferes with cross-building, please use -l option instead
+dpkg-shlibdeps: warning: can't extract name and version from library name 'libiomp5.so'
+dpkg-shlibdeps: warning: can't extract name and version from library name 'libiomp5.so'
+dpkg-shlibdeps: warning: can't extract name and version from library name 'libiomp5.so'
+dpkg-shlibdeps: warning: can't extract name and version from library name 'libiomp5.so'
+dpkg-shlibdeps: warning: package could avoid a useless dependency if debian/ccontrol/usr/bin/ccontrol was not linked against libdl.so.2 (it uses none of the library's symbols)
+dh_gencontrol
+dh_md5sums
+dh_builddeb
+dpkg-deb: building package 'ccontrol' in '../ccontrol_1.0-2_amd64.deb'.
+dpkg-deb: building package 'ccontrol-dbgsym' in '../ccontrol-dbgsym_1.0-2_amd64.deb'.
+FAKEROOTKEY=959895360 LD_LIBRARY_PATH=:/opt/intel/lib/intel64_lin:/opt/intel/tbb/lib/intel64/gcc4.7 LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libfakeroot/libfakeroot-sysv.so debian/rules binary
+ dpkg-genbuildinfo --build=binary
+ dpkg-genchanges --build=binary >../ccontrol_1.0-2_amd64.changes
+dpkg-genchanges: info: binary-only upload (no source code included)
+ dpkg-source --after-build .
+dpkg-buildpackage: info: binary-only upload (no source included)
+Now running lintian ccontrol_1.0-2_amd64.changes ...
+W: ccontrol: hardening-no-pie usr/bin/ccontrol
+Finished running lintian.

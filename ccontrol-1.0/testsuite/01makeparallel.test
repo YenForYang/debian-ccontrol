@@ -1,0 +1,6 @@
+# ARGS world
+# NAME make
+# EXEC /usr/bin/my-make -j20 world
+[*]
+	no-parallel = pattern1 *x*
+	make = /usr/bin/my-make

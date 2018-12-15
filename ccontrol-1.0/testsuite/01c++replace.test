@@ -1,0 +1,5 @@
+# ARGS hello world
+# NAME g++
+# EXEC /usr/bin/my-g++ hello world
+[*]
+	c++ = /usr/bin/my-g++

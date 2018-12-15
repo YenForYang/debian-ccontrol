@@ -1,0 +1,22 @@
+--- ccontrol-1.0.orig/extensions.gperf
++++ ccontrol-1.0/extensions.gperf
+@@ -3,7 +3,7 @@
+    by Martin Pool */
+ /* Keep -Wmissing-declarations happy: */
+ const char *
+-find_extension (register const char *str, register unsigned int len);
++find_extension (register const char *str, register size_t len);
+ %}
+ %language=ANSI-C
+ %define hash-function-name hash_extension
+--- ccontrol-1.0.orig/keywords.gperf
++++ ccontrol-1.0/keywords.gperf
+@@ -1,7 +1,7 @@
+ %{
+ /* Keep -Wmissing-declarations happy: */
+ const struct ccontrol_command *
+-find_keyword (register const char *str, register unsigned int len);
++find_keyword (register const char *str, register size_t len);
+ %}
+ %language=ANSI-C
+ struct ccontrol_command {

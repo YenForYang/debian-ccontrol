@@ -1,0 +1,24 @@
+Description: Don't touch debian/changelog.
+Forwarded: not-needed
+Last-Update: 2011-11-14
+
+--- a/configure
++++ b/configure
+@@ -94,17 +94,6 @@
+     echo $ASCIIDOC
+ fi
+ 
+-DEBVERSION=`head -n1 debian/changelog | sed -e 's/^ccontrol (\([0-9.]\+\)-[0-9]\+) .*$/\1/'`
+-
+-if [ "$DEBVERSION" != "$VERSION" ]; then
+-       echo "Fixing up debian/changelog as the version was changed."
+-       # FIXME: -R is GNU date specific
+-       DATE=`date -R`
+-       cp debian/changelog debian/changelog.old
+-       (sed -e "s/@VERSION@/$VERSION/" -e "s/@DATE@/$DATE/" debian/changelog.template.in ; cat debian/changelog.old) > debian/changelog
+-       rm debian/changelog.old
+-fi
+-
+ echo sed -e \""s,@CC@,$CC,g\"" \
+ 	-e \""s,@BINDIR@,$BINDIR,g\"" \
+ 	-e \""s,@LIBDIR@,$LIBDIR,g\"" \

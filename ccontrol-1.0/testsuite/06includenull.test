@@ -1,0 +1,6 @@
+# ARGS hello world
+# NAME /usr/bin/cc
+# EXEC /usr/bin/my-gcc hello world
+[*]
+	cc = /usr/bin/my-gcc
+	include = /dev/null

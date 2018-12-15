@@ -1,0 +1,251 @@
+CCONTROL(1)
+===========
+Rusty Russell <rusty@rustcorp.com.au>
+v0.9 5 January 2006
+
+NAME
+----
+ccontrol - wrapper to control distcc, ccache and more
+
+SYNOPSIS
+--------
+'gcc' ...
+
+'cc' ...
+
+'c++' ...
+
+'make' ...
+
+'ld' ...
+
+'ccontrol' [--section=<section>] <name> ...
+
+'ccontrol' [--section=<section>]
+
+DESCRIPTION
+-----------
+The ccontrol(1) program takes over the roles of the compiler and
+linker, and reads a configuration file to decide what to do before
+invoking them.  This is particularly useful for centralized control
+over commands and options, such as enabling distcc(1) and ccache(1).
+
+When ccontrol(1) is invoked under its own name with no arguments, 
+it prints out the settings which apply in this directory (unless
+'--section' is specified).
+
+Versions are named after the last person to report a bug.
+
+OPTIONS
+-------
+
+Normally ccontrol(1) is invoked as a symboling link to cc, make, etc,
+so it can identify what is being invoked by examining its own name.
+It can also be invoked under its own name, in which case
+ccontrol-specific arguments can be supplied.  The first non-option
+argument will be used to identify the invocation, eg. "ccontrol gcc ...".
+
+The following options are supported, when invoked as 'ccontrol':
+
+--section=<section>::
+  This is treated as the "current directory" for the purposes of
+  evaluating the configuration file.  As all real directories must
+  begin with a "/" using an argument which does not, is a good way of
+  overriding configuration for this particular invocation.
+
+CONFIGURATION FILE
+------------------
+ccontrol's configuration file is $HOME/.ccontrol/config.  If this
+cannot be read (and written), your compilations will all fail.  It is
+normal to have several different configuration files in this
+directory, and make default a symbolic link.
+
+SYNTAX
+------
+A configuration file consists of sections, led by a "[path]" header
+and followed by indented "name = value" entries.  The first section is
+usually labelled "[*]" to set up the defaults.  At the very least, you
+must set the "cc", "c++", "make" and "ld" values.
+
+ccontrol will read every section which matches the current directory,
+so you can override values on a per-directory basis.  The "[path]"
+header of each section is a shell-style wildcard (see glob(7)) which
+indicates the directory or directories it applies to.  Usually this
+will end in a "*" to include all subdirectories.
+
+All paths beginning with "~" are relative to the user's home
+directory. A path may be specified as a directory, in which case
+ccontrol will append the program name to the directory.
+
+The following settings are available:
+
+cc::
+  Followed by '=' specifies the path of the compiler to be
+  invoked when ccontrol is invoked as "cc" or "gcc".  ccontrol will
+  fail to compile C programs if this is not set.
+
+c++::
+  Followed by '=' specifies the path of the compiler to be
+  invoked when ccontrol is invoked as "c++" or "g++".  ccontrol will
+  fail to compile C++ programs if this is not set.
+
+ld::
+  Followed by '=' specifies the path of the linker to be invoked
+  when ccontrol is invoked as "ld".  ccontrol will fail to link
+  programs if this is not set.
+
+make::
+  Followed by '=' specifies the path of the binary to be invoked
+  when ccontrol is invoked as "make".  ccontrol will fail to make if
+  this is not set.
+
+ccache::
+  Followed by '=' specifies the path of "ccache", and indicates
+  that ccache is to be used where appropriate.  If followed by
+  'disable', or not set, ccache will not be used.
+
+distcc::
+  Followed by '=' specifies the path of "distcc", and indicates
+  that distcc is to be used where appropriate.  If followed by
+  'disable', or not set, or distcc-hosts is not set, distcc will not
+  be used.
+
+distcc-hosts::
+  Followed by '=' specifies the distcc servers to use, as per the
+  DISTCC_HOSTS environment variable in distcc(1).  Followed by
+  'disable' disables distcc.
+
+distc++-hosts::
+  The same as distcc-hosts, but only applies to C++ compilations.  If
+  not set, distcc-hosts is used.  You can thus disable distcc for C++
+  compilations by setting "distc++-hosts disable".
+
+cpus::
+  Followed by '=' and a number of CPUs, set to the number of CPUs you
+  have (the default is "1").  'ccontrol' uses this to tune the degree
+  of parallelism.
+
+no-parallel::
+  Followed by '=' and a space-separated list of wildcards, suppresses
+  parallel make for any make target matching one of those.  This
+  option is needed because ccontrol(1) usually forces make(1) to
+  perform all actions in parallel, but this can be confusing when an
+  error occurs, and breaks poorly-written makefiles.  Followed by
+  'disable', enables parallel make for all targets: this is useful to
+  re-enable parallel make in a subdirectory.
+
+nice::
+  Followed by '=' and a priority level from -19 to 20, causes ccontrol
+  to try to set its priority to this value.  Default is 10.
+
+include::
+  Followed by '=' specifies a file to include at the current point.
+  The effect is exactly as if the contents of the included file were
+  literally inserted.  Can be used at file level to include sections.
+  Can also be used within sections to include section fragments.
+
+add make::
+  Followed by '=' specifies an argument to be added to each invocation
+  of 'make'.  This can be specified multiple times to add multiple
+  arguments.  Followed by 'disable' removes any arguments previously
+  specified.
+
+add env::
+  Followed by '=' specifies an environment variable to be set, such as
+  "add env = CCACHE_DIR=/tmp".  This can be specified multiple times
+  to set multiple environment variables.  Followed by 'disable'
+  removes any arguments previously specified.
+
+verbose::
+  By itself, indicates that ccontrol(1) is to spit lots of crap out to
+  standard error about what it's doing to your innocent command line.
+
+lock-file::
+  Specify a particular lock file to use.  
+
+EXAMPLES
+--------
+
+This is the minimal configuration file:
+.........................
+[*]
+	cc = /usr/bin/gcc
+	c++ = /usr/bin/g++
+	ld = /usr/bin/ld
+	make = /usr/bin/make
+.........................
+
+If you have multiple locations (such as a laptop) it is common to have
+a "global" file which is included from every configuration file, like so:
+
+.........................
+# Configuration file for when I'm at work.  Lots of distcc hosts!
+include = ~/.ccontrol/global
+
+[*]
+	distcc-hosts = snab swarm1 swarm3 swarm4 swarm5 fandango2 mingo
+	distc++-hosts = snab mingo
+.........................
+
+Here is a complete configuration file with several common scenarios:
+.........................
+[*]
+	cc = /usr/bin/gcc-4.0
+	c++ = /usr/bin/g++-4.0
+	ld = /usr/bin/ld
+	make = /usr/bin/make
+# Comment this back in for debugging
+#	verbose
+	distcc = /usr/bin/distcc
+	distcc-hosts = snab swarm1 swarm3 swarm4 swarm5 fandango2 mingo
+	distc++-hosts = snab mingo
+	ccache = /usr/bin/ccache
+	# make check should not generally be run in parallel
+	no-parallel = check
+
+# Wesnoth doesn't compile with g++ 4.0
+[*wesnoth*]
+	c++ = /usr/bin/g++-3.4
+
+# Stupid third-party modules don't build in parallel.
+[/usr/src/modules/*]
+	no-parallel = *
+
+# Using distcc when testing module-init-tools causes strange effects.
+[*module-init-tools*/tests/*]
+	distcc disable
+.........................
+
+BUGS
+----
+The ~/.ccontrol/config file must be writable: ccontrol(1) needs to get
+an exclusive write lock on it, which means it needs to open the file
+for writing.  Use 'include' to include read-only files.
+
+ccontrol will not immediately notice a change in included files, only
+in the toplevel file (ccontrol re-reads the config file if it changed
+while ccontrol was trying to grab a lock).
+
+The Linux (<= 2.6.15) cpufreq 'ondemand' governor (common on laptops)
+will not increase CPU speed when using ccontrol(1), because ccontrol
+re-nices compilations.  This can make builds 2-3 times slower.  Either
+use another governor, or tell 'ondemand' to ignore nice values:
+.........................
+echo 1 > /sys/devices/system/cpu/cpu0/cpufreq/ondemand/ignore_nice
+.........................
+
+If your code doesn't compile, ccontrol can only make it not compile
+faster.
+
+AUTHOR
+------
+Written by Rusty Russell <rusty@rustcorp.com.au>
+
+LICENSE
+-------
+Copyright (C) 2005 Rusty Russell.  Free use of this software is
+granted under the terms of the GNU General Public License (GPL).
+
+SEE ALSO
+--------
+make(1), cc(1), c++(1), ld(1), distcc(1), ccache(1), glob(7), cpufreq-set(1)

@@ -1,0 +1,3 @@
+# NAME ccontrol
+# ARGS -V
+# EXEC *version @VERSION@ (@VERSION_NAME@)

@@ -1,0 +1,9 @@
+# ARGS world
+# NAME make
+# EXEC /usr/bin/my-make -j20 world
+[*]
+	no-parallel = world
+	make = /usr/bin/my-make
+
+[/*]
+	no-parallel disable

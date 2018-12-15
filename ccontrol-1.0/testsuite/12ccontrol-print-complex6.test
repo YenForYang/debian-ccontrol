@@ -1,0 +1,18 @@
+# NAME ccontrol
+# ARGS --section=test6
+# EXEC \[test6\]
+# EXEC 	cc = /usr/bin/my-gcc
+# EXEC 	c++ = /usr/bin/my-c++
+# EXEC 	make = /usr/bin/my-make
+# EXEC 	ld = /usr/bin/my-ld
+# EXEC 	ccache = /usr/bin/my-ccache
+# EXEC 	no-parallel = *
+[*]
+	cc = /usr/bin/my-gcc
+	c++ = /usr/bin/my-c++
+	ld = /usr/bin/my-ld
+	make = /usr/bin/my-make
+	ccache = /usr/bin/my-ccache
+
+[test6]
+	no-parallel = *

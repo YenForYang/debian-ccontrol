@@ -1,0 +1,29 @@
+%{
+/* Derived from distcc's dcc_is_source, Copyright (C) 2002, 2003, 2004
+   by Martin Pool */
+/* Keep -Wmissing-declarations happy: */
+const char *
+find_extension (register const char *str, register size_t len);
+%}
+%language=ANSI-C
+%define hash-function-name hash_extension
+%define lookup-function-name find_extension
+%readonly-tables
+%enum
+%%
+i
+ii
+c
+cc
+cpp
+cxx
+cp
+c++
+C
+m
+mm
+mi
+mii
+M
+s
+S

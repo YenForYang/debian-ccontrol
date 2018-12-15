@@ -1,0 +1,16 @@
+Description: Accept networks ending in ‘.0.0’ when scanning for distcc hosts.
+Author: Ted Percival <ted@midg3t.net>
+Forwarded: no
+Last-Update: 2011-11-14
+
+--- a/ccontrol-init
++++ b/ccontrol-init
+@@ -48,7 +48,7 @@
+ {
+     NET=`route -n | grep '^[123456789]' | awk '{print $1}' | head -1`
+     case "$NET" in
+-	*[123456789].0)
++	[123456789]*.0)
+ 	    echo -n scanning network $NET...
+ 	    set +e
+ 	    NET=`echo $NET | sed 's/\.0$//'`

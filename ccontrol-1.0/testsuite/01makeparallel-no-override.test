@@ -1,0 +1,5 @@
+# ARGS -j3 world
+# NAME make
+# EXEC /usr/bin/my-make -j3 world
+[*]
+	make = /usr/bin/my-make

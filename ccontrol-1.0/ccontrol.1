@@ -1,0 +1,304 @@
+'\" t
+.\"     Title: ccontrol
+.\"    Author: Rusty Russell <rusty@rustcorp.com.au>
+.\" Generator: DocBook XSL Stylesheets v1.79.1 <http://docbook.sf.net/>
+.\"      Date: v0.9 5 January 2006
+.\"    Manual: \ \&
+.\"    Source: \ \&
+.\"  Language: English
+.\"
+.TH "CCONTROL" "1" "v0\&.9 5 January 2006" "\ \&" "\ \&"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+ccontrol \- wrapper to control distcc, ccache and more
+.SH "SYNOPSIS"
+.sp
+\fIgcc\fR \&...
+.sp
+\fIcc\fR \&...
+.sp
+\fIc++\fR \&...
+.sp
+\fImake\fR \&...
+.sp
+\fIld\fR \&...
+.sp
+\fIccontrol\fR [\-\-section=<section>] <name> \&...
+.sp
+\fIccontrol\fR [\-\-section=<section>]
+.SH "DESCRIPTION"
+.sp
+The ccontrol(1) program takes over the roles of the compiler and linker, and reads a configuration file to decide what to do before invoking them\&. This is particularly useful for centralized control over commands and options, such as enabling distcc(1) and ccache(1)\&.
+.sp
+When ccontrol(1) is invoked under its own name with no arguments, it prints out the settings which apply in this directory (unless \fI\-\-section\fR is specified)\&.
+.sp
+Versions are named after the last person to report a bug\&.
+.SH "OPTIONS"
+.sp
+Normally ccontrol(1) is invoked as a symboling link to cc, make, etc, so it can identify what is being invoked by examining its own name\&. It can also be invoked under its own name, in which case ccontrol\-specific arguments can be supplied\&. The first non\-option argument will be used to identify the invocation, eg\&. "ccontrol gcc \&..."\&.
+.sp
+The following options are supported, when invoked as \fIccontrol\fR:
+.PP
+\-\-section=<section>
+.RS 4
+This is treated as the "current directory" for the purposes of evaluating the configuration file\&. As all real directories must begin with a "/" using an argument which does not, is a good way of overriding configuration for this particular invocation\&.
+.RE
+.SH "CONFIGURATION FILE"
+.sp
+ccontrol\(cqs configuration file is $HOME/\&.ccontrol/config\&. If this cannot be read (and written), your compilations will all fail\&. It is normal to have several different configuration files in this directory, and make default a symbolic link\&.
+.SH "SYNTAX"
+.sp
+A configuration file consists of sections, led by a "[path]" header and followed by indented "name = value" entries\&. The first section is usually labelled "[*]" to set up the defaults\&. At the very least, you must set the "cc", "c++", "make" and "ld" values\&.
+.sp
+ccontrol will read every section which matches the current directory, so you can override values on a per\-directory basis\&. The "[path]" header of each section is a shell\-style wildcard (see glob(7)) which indicates the directory or directories it applies to\&. Usually this will end in a "*" to include all subdirectories\&.
+.sp
+All paths beginning with "~" are relative to the user\(cqs home directory\&. A path may be specified as a directory, in which case ccontrol will append the program name to the directory\&.
+.sp
+The following settings are available:
+.PP
+cc
+.RS 4
+Followed by
+\fI=\fR
+specifies the path of the compiler to be invoked when ccontrol is invoked as "cc" or "gcc"\&. ccontrol will fail to compile C programs if this is not set\&.
+.RE
+.PP
+c++
+.RS 4
+Followed by
+\fI=\fR
+specifies the path of the compiler to be invoked when ccontrol is invoked as "c" or "g"\&. ccontrol will fail to compile C++ programs if this is not set\&.
+.RE
+.PP
+ld
+.RS 4
+Followed by
+\fI=\fR
+specifies the path of the linker to be invoked when ccontrol is invoked as "ld"\&. ccontrol will fail to link programs if this is not set\&.
+.RE
+.PP
+make
+.RS 4
+Followed by
+\fI=\fR
+specifies the path of the binary to be invoked when ccontrol is invoked as "make"\&. ccontrol will fail to make if this is not set\&.
+.RE
+.PP
+ccache
+.RS 4
+Followed by
+\fI=\fR
+specifies the path of "ccache", and indicates that ccache is to be used where appropriate\&. If followed by
+\fIdisable\fR, or not set, ccache will not be used\&.
+.RE
+.PP
+distcc
+.RS 4
+Followed by
+\fI=\fR
+specifies the path of "distcc", and indicates that distcc is to be used where appropriate\&. If followed by
+\fIdisable\fR, or not set, or distcc\-hosts is not set, distcc will not be used\&.
+.RE
+.PP
+distcc\-hosts
+.RS 4
+Followed by
+\fI=\fR
+specifies the distcc servers to use, as per the DISTCC_HOSTS environment variable in distcc(1)\&. Followed by
+\fIdisable\fR
+disables distcc\&.
+.RE
+.PP
+distc++\-hosts
+.RS 4
+The same as distcc\-hosts, but only applies to Ccompilations\&. If not set, distcc\-hosts is used\&. You can thus disable distcc for C
+compilations by setting "distc++\-hosts disable"\&.
+.RE
+.PP
+cpus
+.RS 4
+Followed by
+\fI=\fR
+and a number of CPUs, set to the number of CPUs you have (the default is "1")\&.
+\fIccontrol\fR
+uses this to tune the degree of parallelism\&.
+.RE
+.PP
+no\-parallel
+.RS 4
+Followed by
+\fI=\fR
+and a space\-separated list of wildcards, suppresses parallel make for any make target matching one of those\&. This option is needed because ccontrol(1) usually forces make(1) to perform all actions in parallel, but this can be confusing when an error occurs, and breaks poorly\-written makefiles\&. Followed by
+\fIdisable\fR, enables parallel make for all targets: this is useful to re\-enable parallel make in a subdirectory\&.
+.RE
+.PP
+nice
+.RS 4
+Followed by
+\fI=\fR
+and a priority level from \-19 to 20, causes ccontrol to try to set its priority to this value\&. Default is 10\&.
+.RE
+.PP
+include
+.RS 4
+Followed by
+\fI=\fR
+specifies a file to include at the current point\&. The effect is exactly as if the contents of the included file were literally inserted\&. Can be used at file level to include sections\&. Can also be used within sections to include section fragments\&.
+.RE
+.PP
+add make
+.RS 4
+Followed by
+\fI=\fR
+specifies an argument to be added to each invocation of
+\fImake\fR\&. This can be specified multiple times to add multiple arguments\&. Followed by
+\fIdisable\fR
+removes any arguments previously specified\&.
+.RE
+.PP
+add env
+.RS 4
+Followed by
+\fI=\fR
+specifies an environment variable to be set, such as "add env = CCACHE_DIR=/tmp"\&. This can be specified multiple times to set multiple environment variables\&. Followed by
+\fIdisable\fR
+removes any arguments previously specified\&.
+.RE
+.PP
+verbose
+.RS 4
+By itself, indicates that ccontrol(1) is to spit lots of crap out to standard error about what it\(cqs doing to your innocent command line\&.
+.RE
+.PP
+lock\-file
+.RS 4
+Specify a particular lock file to use\&.
+.RE
+.SH "EXAMPLES"
+.sp
+This is the minimal configuration file:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+[*]
+        cc = /usr/bin/gcc
+        c++ = /usr/bin/g++
+        ld = /usr/bin/ld
+        make = /usr/bin/make
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+If you have multiple locations (such as a laptop) it is common to have a "global" file which is included from every configuration file, like so:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+# Configuration file for when I\*(Aqm at work\&.  Lots of distcc hosts!
+include = ~/\&.ccontrol/global
+
+[*]
+        distcc\-hosts = snab swarm1 swarm3 swarm4 swarm5 fandango2 mingo
+        distc++\-hosts = snab mingo
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+Here is a complete configuration file with several common scenarios:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+[*]
+        cc = /usr/bin/gcc\-4\&.0
+        c++ = /usr/bin/g++\-4\&.0
+        ld = /usr/bin/ld
+        make = /usr/bin/make
+# Comment this back in for debugging
+#       verbose
+        distcc = /usr/bin/distcc
+        distcc\-hosts = snab swarm1 swarm3 swarm4 swarm5 fandango2 mingo
+        distc++\-hosts = snab mingo
+        ccache = /usr/bin/ccache
+        # make check should not generally be run in parallel
+        no\-parallel = check
+
+# Wesnoth doesn\*(Aqt compile with g++ 4\&.0
+[*wesnoth*]
+        c++ = /usr/bin/g++\-3\&.4
+
+# Stupid third\-party modules don\*(Aqt build in parallel\&.
+[/usr/src/modules/*]
+        no\-parallel = *
+
+# Using distcc when testing module\-init\-tools causes strange effects\&.
+[*module\-init\-tools*/tests/*]
+        distcc disable
+.fi
+.if n \{\
+.RE
+.\}
+.SH "BUGS"
+.sp
+The ~/\&.ccontrol/config file must be writable: ccontrol(1) needs to get an exclusive write lock on it, which means it needs to open the file for writing\&. Use \fIinclude\fR to include read\-only files\&.
+.sp
+ccontrol will not immediately notice a change in included files, only in the toplevel file (ccontrol re\-reads the config file if it changed while ccontrol was trying to grab a lock)\&.
+.sp
+The Linux (\(la 2\&.6\&.15) cpufreq \fIondemand\fR governor (common on laptops) will not increase CPU speed when using ccontrol(1), because ccontrol re\-nices compilations\&. This can make builds 2\-3 times slower\&. Either use another governor, or tell \fIondemand\fR to ignore nice values:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+echo 1 > /sys/devices/system/cpu/cpu0/cpufreq/ondemand/ignore_nice
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+If your code doesn\(cqt compile, ccontrol can only make it not compile faster\&.
+.SH "AUTHOR"
+.sp
+Written by Rusty Russell <\m[blue]\fBrusty@rustcorp\&.com\&.au\fR\m[]\&\s-2\u[1]\d\s+2>
+.SH "LICENSE"
+.sp
+Copyright \(co 2005 Rusty Russell\&. Free use of this software is granted under the terms of the GNU General Public License (GPL)\&.
+.SH "SEE ALSO"
+.sp
+make(1), cc(1), c++(1), ld(1), distcc(1), ccache(1), glob(7), cpufreq\-set(1)
+.SH "AUTHOR"
+.PP
+\fBRusty Russell\fR <\&rusty@rustcorp\&.com\&.au\&>
+.RS 4
+Author.
+.RE
+.SH "NOTES"
+.IP " 1." 4
+rusty@rustcorp.com.au
+.RS 4
+\%mailto:rusty@rustcorp.com.au
+.RE

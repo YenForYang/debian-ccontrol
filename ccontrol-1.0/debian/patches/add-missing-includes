@@ -1,0 +1,15 @@
+Description: Add missing includes.
+Author: Jakub Wilk <jwilk@debian.org>
+Forwarded: no
+Last-Update: 2011-11-14
+
+--- a/ccontrol.c
++++ b/ccontrol.c
+@@ -11,6 +11,7 @@
+ #include <sys/wait.h>
+ #include <sys/time.h>
+ #include <sys/resource.h>
++#include <sys/stat.h>
+ #include <fcntl.h>
+ #include "stdrusty.h"
+ #include "ccontrol.h"

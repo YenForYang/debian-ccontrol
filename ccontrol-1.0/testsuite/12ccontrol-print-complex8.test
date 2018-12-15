@@ -1,0 +1,18 @@
+# NAME ccontrol
+# ARGS --section=test8
+# EXEC \[test8\]
+# EXEC 	cc = /usr/bin/my-gcc
+# EXEC 	c++ = /usr/bin/my-c++
+# EXEC 	make = /usr/bin/my-make
+# EXEC 	ld = /usr/bin/my-ld
+# EXEC 	ccache = /usr/bin/my-ccache
+# EXEC 	cpus = 2
+[*]
+	cc = /usr/bin/my-gcc
+	c++ = /usr/bin/my-c++
+	ld = /usr/bin/my-ld
+	make = /usr/bin/my-make
+	ccache = /usr/bin/my-ccache
+
+[test8]
+	cpus = 2

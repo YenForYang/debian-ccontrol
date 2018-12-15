@@ -1,0 +1,12 @@
+6314a428b24fe2c03f9eb3218dcc63fd  usr/bin/ccontrol
+67ef49d2ee0a4c3b1f2fabc6f52105da  usr/bin/ccontrol-init
+b06826da5fe7e74ae3daaf2f4b9f802f  usr/bin/gccontrol
+b1785db7f605b213a43c1be8a26dce33  usr/share/ccontrol/ccontrol-key.png
+97a716eaad08d5ae5062abada16424c2  usr/share/doc/ccontrol/NEWS.Debian.gz
+77950e327e248a663f867dd03f3ae2c1  usr/share/doc/ccontrol/README.Debian
+37529a3d8cf8dc66ebcd36ab42ee0d48  usr/share/doc/ccontrol/changelog.Debian.gz
+4b2892a4492d352a91ea6751ff510974  usr/share/doc/ccontrol/changelog.gz
+8269e65999f948ec8eff76c52960962c  usr/share/doc/ccontrol/copyright
+f017bc1ae53a679bfafa62d44c34d200  usr/share/man/man1/ccontrol-init.1.gz
+e50df319b927d599faf3e453838c9b68  usr/share/man/man1/ccontrol.1.gz
+5c749d76520f8b47b95e13d66e7ccacc  usr/share/man/man1/gccontrol.1.gz

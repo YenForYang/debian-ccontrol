@@ -1,0 +1,41 @@
+This package was debianized by Michael Neuling <mikey@neuling.org> on
+Sat, 31 Dec 2005 13:16:39 +1030.
+It has been maintained by Ted Percival <ted@midg3t.net> since
+Sat,  5 Aug 2006 13:22:21 +1000.
+
+It was downloaded from http://ozlabs.org/~rusty/ccontrol/
+
+Upstream Author: Rusty Russell <rusty@rustcorp.com.au>
+
+Copyright: 2005, 2006 Rusty Russell <rusty@rustcorp.com.au>
+
+License:
+
+   This package is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
+
+   This package is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this package; if not, write to the Free Software
+   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
+
+On Debian systems, the complete text of the GNU General
+Public License (version 2) can be found in `/usr/share/common-licenses/GPL-2'.
+
+The Debian packaging is © 2005 Michael Neuling <mikey@neuling.org> and
+© 2007, Ted Percival <ted@midg3t.net>.
+
+The following files contain code copyright 2002, 2003, 2004,
+Martin Pool <mbp@samba.org>.
+  ccontrol-identify.c
+  extensions.c
+  extensions.gperf
+
+The Debian package's compiler symlinking code is based on that from the
+ccache package, copyright 2002 Paul Russell <prussell@debian.org>.

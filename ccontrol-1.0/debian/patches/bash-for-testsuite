@@ -1,0 +1,15 @@
+Description: Use bash for testsuite/test.sh.
+ Use bash for testsuite/test.sh. This is needed for the case match on lines 49
+ and 50 (dash matches differently).
+Author: Ted Percival <ted@midg3t.net>
+Forwarded: no
+Last-Update: 2011-11-14
+
+--- a/testsuite/test.sh
++++ b/testsuite/test.sh
+@@ -1,4 +1,4 @@
+-#! /bin/sh -e
++#! /bin/bash -e
+ 
+ TESTDIR=/tmp/ccontrol-test
+ 

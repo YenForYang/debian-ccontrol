@@ -1,0 +1,10 @@
+# ARGS -c -o hello.o world.c
+# NAME /usr/bin/gcc
+# EXIT 1
+# EXEC ccontrol error: parse error on line 9: expected = targets
+
+[*module-init-tools*]
+	no-parallel
+
+[*kernel/tmp]
+	add make = ARCH=i386

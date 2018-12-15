@@ -1,0 +1,10 @@
+# ARGS -c -o hello.o world.c
+# NAME /usr/bin/gcc
+# FAILDISTCC
+# EXEC DISTCC_HOSTS='snab/4 fort/6' /usr/bin/my-gcc -c -o hello.o world.c
+# Also tests parsing after distcc-hosts, which uses to_eol().
+[*]
+	distcc-hosts = snab/4 fort/6
+	distcc = /usr/bin/distcc
+	cc = /usr/bin/my-gcc
+

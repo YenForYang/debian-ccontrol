@@ -1,0 +1,15 @@
+ccontrol (0.9.1+20071204-1) unstable; urgency=low
+
+  The symlinks provided in /usr/lib/ccontrol for alternate compiler versions
+  don't actually execute the alternate compiler unless ccontrol config files
+  are updated to point to the enclosing directory, eg.
+    cc = /usr/bin
+  instead of
+    cc = /usr/bin/gcc
+
+  The ccontrol-init(1) program will now generate config files pointing to the
+  enclosing directory so the correct program will be found.
+
+  This is currently a Debian extension. See bug #447832 for details.
+
+ -- Ted Percival <ted@midg3t.net>  Wed, 05 Dec 2007 11:50:13 +0000

@@ -1,0 +1,34 @@
+Format: 1.8
+Date: Tue, 25 Jul 2017 04:02:29 +0200
+Source: ccontrol
+Binary: ccontrol
+Built-For-Profiles: nobiarch nocheck nodoc
+Architecture: amd64
+Version: 1.0-2
+Distribution: unstable
+Urgency: medium
+Maintainer: Debian QA Group <packages@qa.debian.org>
+Changed-By: Adam Borowski <kilobyte@angband.pl>
+Description:
+ ccontrol   - Compilation controller
+Closes: 869593
+Changes:
+ ccontrol (1.0-2) unstable; urgency=medium
+ .
+   * QA upload.
+   * Comment out the VCS fields -- no way to fetch the ancient repository.
+   * Use compat 10.
+   * Turn on gcc colored diagnostics.
+   * Fix gperf prototypes. Closes: #869593.
+Checksums-Sha1:
+ 1ce7e9834a681e05f719def41f6e1474f51e4db7 22372 ccontrol-dbgsym_1.0-2_amd64.deb
+ bb53d9495070028b46a73fa454fad371d6c5e447 5941 ccontrol_1.0-2_amd64.buildinfo
+ f96a98556597dbaadfa830ea2f8f9ea5448b123a 49288 ccontrol_1.0-2_amd64.deb
+Checksums-Sha256:
+ 20965db3f25936488dc3dad90b42ca798aa010cc1279895e9c998585079c11e0 22372 ccontrol-dbgsym_1.0-2_amd64.deb
+ 65be4b78542539c7662d0176c7b2e8f53bc7c8121611e0414242e8731ff0b733 5941 ccontrol_1.0-2_amd64.buildinfo
+ b232454105c95401c55ca592d9279a9ba4c9e48799710db4349180cdd3014404 49288 ccontrol_1.0-2_amd64.deb
+Files:
+ 44147347aa0cbf7355bc137fd14b105e 22372 debug optional ccontrol-dbgsym_1.0-2_amd64.deb
+ cc30dd550e66c61e60fc074657917c42 5941 devel optional ccontrol_1.0-2_amd64.buildinfo
+ e64883aa4f9c79dbb4c5c7078bf57bc6 49288 devel optional ccontrol_1.0-2_amd64.deb

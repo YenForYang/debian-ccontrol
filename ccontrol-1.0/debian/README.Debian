@@ -1,0 +1,11 @@
+ccontrol for Debian
+-------------------
+
+By default the ccontrol[-init] programs will placed in /usr/bin and
+the links (gcc, cc, ld etc.) will be placed in /usr/lib/ccontrol.
+Hence users need to add /usr/lib/ccontrol to their path to work with
+ccontrol.
+
+	export PATH=/usr/lib/ccontrol:$PATH
+
+ -- Michael Neuling <mikey@neuling.org>, Sat, 31 Dec 2005 13:16:39 +1030

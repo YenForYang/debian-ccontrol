@@ -1,0 +1,17 @@
+Description: Only run the selected test if just one is selected.
+ Only run the selected test if just one is selected. Previously the selected
+ test and all that followed would be run.
+Author: Ted Percival <ted@midg3t.net>
+Forwarded: no
+Last-Update: 2011-11-14
+
+--- a/testsuite/test.sh
++++ b/testsuite/test.sh
+@@ -76,6 +76,7 @@
+ 
+ MATCH=${1:-"*"}
+ for f in testsuite/[0-9]*.test; do
++    RUN=
+     case `basename $f` in $MATCH) RUN=1;; esac
+     [ -n "$RUN" ] || continue
+ 

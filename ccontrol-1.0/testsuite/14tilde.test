@@ -1,0 +1,5 @@
+# ARGS hello world
+# NAME /usr/bin/cc
+# EXEC /tmp/ccontrol-test/bin/my-gcc hello world
+[*]
+	cc = ~/bin/my-gcc

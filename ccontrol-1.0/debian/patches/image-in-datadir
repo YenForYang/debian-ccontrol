@@ -1,0 +1,85 @@
+Description: Use DATADIR for the PNG image.
+Author: Ted Percival <ted@midg3t.net>
+Forwarded: no
+Last-Update: 2011-11-14
+
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -6,6 +6,7 @@
+ ALLFILES=$(C_FILES) $(GPERF_C_FILES) Makefile stdrusty.h ccontrol.h
+ BINDIR=@BINDIR@
+ LIBDIR=@LIBDIR@
++DATADIR=@DATADIR@
+ MANDIR=@MANDIR@
+ XMLTO=@XMLTO@
+ ASCIIDOC=@ASCIIDOC@
+@@ -31,12 +32,12 @@
+ 
+ install: installbin installlib installman installgui
+ 
+-$(prefix)$(BINDIR) $(prefix)$(MANDIR)/man1 $(prefix)$(LIBDIR):
++$(prefix)$(BINDIR) $(prefix)$(MANDIR)/man1 $(prefix)$(LIBDIR) $(prefix)$(DATADIR):
+ 	mkdir -p $@
+ 
+-installgui: $(prefix)$(LIBDIR)/ccontrol-key.png $(prefix)$(BINDIR)/gccontrol.py
++installgui: $(prefix)$(DATADIR)/ccontrol-key.png $(prefix)$(BINDIR)/gccontrol.py
+ 
+-$(prefix)$(LIBDIR)/ccontrol-key.png: gui/ccontrol-key.png $(prefix)$(LIBDIR) 
++$(prefix)$(DATADIR)/ccontrol-key.png: gui/ccontrol-key.png $(prefix)$(DATADIR) 
+ 	cp $< $@
+ 
+ $(prefix)$(BINDIR)/gccontrol.py: gui/gccontrol.py $(prefix)$(BINDIR) 
+--- a/configure
++++ b/configure
+@@ -17,6 +17,7 @@
+ BINDIR=/usr/local/bin
+ LIBDIR=/usr/local/lib/ccontrol
+ MANDIR=/usr/local/share/man
++DATADIR=/usr/local/share/ccontrol
+ XMLTO=`which xmlto`
+ ASCIIDOC=`which asciidoc`
+ OPTFLAGS=-O3
+@@ -28,6 +29,7 @@
+ 	--bindir=*) BINDIR=`echo $1 | cut -d= -f2-`;;
+ 	--libdir=*) LIBDIR=`echo $1 | cut -d= -f2-`;;
+ 	--mandir=*) MANDIR=`echo $1 | cut -d= -f2-`;;
++	--datadir=*) DATADIR=`echo $1 | cut -d= -f2-`;;
+ 	--xmlto=*) XMLTO=`echo $1 | cut -d= -f2-`;;
+ 	--asciidoc=*) ASCIIDOC=`echo $1 | cut -d= -f2-`;;
+ 	--enable-debug) OPTFLAGS=-g; DEBUG=1; NODIET=1;;
+@@ -39,6 +41,7 @@
+ 	    echo "  --bindir=$BINDIR" >&2
+ 	    echo "  --libdir=$LIBDIR" >&2
+ 	    echo "  --mandir=$MANDIR" >&2
++	    echo "  --datadir=$DATADIR" >&2
+ 	    echo "  --xmlto=$XMLTO" >&2
+ 	    echo "  --asciidoc=$ASCIIDOC" >&2
+ 	    echo "  --enable-debug" >&2
+@@ -98,6 +101,7 @@
+ 	-e \""s,@BINDIR@,$BINDIR,g\"" \
+ 	-e \""s,@LIBDIR@,$LIBDIR,g\"" \
+ 	-e \""s,@MANDIR@,$MANDIR,g\"" \
++	-e \""s,@DATADIR@,$DATADIR,g\"" \
+ 	-e \""s,@XMLTO@,$XMLTO,g\"" \
+ 	-e \""s,@ASCIIDOC@,$ASCIIDOC,g\"" \
+ 	-e \""s,@CFLAGS@,$CFLAGS,g\"" \
+--- a/gui/gccontrol.py.in
++++ b/gui/gccontrol.py.in
+@@ -6,7 +6,7 @@
+ import os
+ import stat
+ 
+-LIBDIR = "@LIBDIR@"
++DATADIR = "@DATADIR@"
+ 
+ 
+ def unexpand_user(path):
+@@ -160,7 +160,7 @@
+         self._gui = ConfigEditor()
+ 
+         img = gtk.Image()
+-        img.set_from_file("%s/ccontrol-key.png" % LIBDIR)
++        img.set_from_file("%s/ccontrol-key.png" % DATADIR)
+         eventbox = gtk.EventBox()
+         eventbox.add(img)
+         eventbox.set_events(gtk.gdk.BUTTON_PRESS_MASK)

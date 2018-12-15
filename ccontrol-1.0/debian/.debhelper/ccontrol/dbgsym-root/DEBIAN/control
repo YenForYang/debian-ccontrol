@@ -1,0 +1,12 @@
+Package: ccontrol-dbgsym
+Source: ccontrol
+Version: 1.0-2
+Auto-Built-Package: debug-symbols
+Architecture: amd64
+Maintainer: Debian QA Group <packages@qa.debian.org>
+Installed-Size: 41
+Depends: ccontrol (= 1.0-2)
+Section: debug
+Priority: optional
+Description: debug symbols for ccontrol
+Build-Ids: 60dcdbe46f2aae419b5c5e6e7f3ea5fe84ccf25e

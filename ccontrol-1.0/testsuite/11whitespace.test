@@ -1,0 +1,12 @@
+# Test that lines containing only whitespace are ignored.
+# ARGS hello world
+# NAME /usr/bin/cc
+# EXEC /usr/bin/my-gcc hello world
+ 
+	
+[*]
+	
+	cc = /usr/bin/my-gcc
+        c++ = /usr/bin/my-g++
+ 	# This is a comment
+	

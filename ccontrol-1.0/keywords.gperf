@@ -1,0 +1,34 @@
+%{
+/* Keep -Wmissing-declarations happy: */
+const struct ccontrol_command *
+find_keyword (register const char *str, register size_t len);
+%}
+%language=ANSI-C
+struct ccontrol_command {
+	const char *name;
+	enum token_type type;
+};
+%define hash-function-name hash_keyword
+%define lookup-function-name find_keyword
+%readonly-tables
+%enum
+%struct-type
+%compare-strncmp
+%%
+no-parallel, NO_PARALLEL
+cc, CC
+c++, CPLUSPLUS
+ld, LD
+make, MAKE
+ccache, CCACHE
+distcc, DISTCC
+distcc-hosts, DISTCC_HOSTS
+distc++-hosts, DISTCPLUSPLUS_HOSTS
+verbose, VERBOSE
+nice, NICE
+include, INCLUDE
+cpus, CPUS
+disable, DISABLE
+add, ADD
+env, ENV
+lock-file, LOCK_FILE

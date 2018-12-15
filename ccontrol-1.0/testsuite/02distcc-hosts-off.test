@@ -1,0 +1,11 @@
+# ARGS -c -o hello.o world.c
+# NAME /usr/bin/gcc
+# EXEC /usr/bin/my-gcc -c -o hello.o world.c
+[*]
+	distcc-hosts = snab/4 fort/6
+	distcc = /usr/bin/distcc
+	cc = /usr/bin/my-gcc1
+
+[/*]
+	distcc-hosts disable
+	cc = /usr/bin/my-gcc

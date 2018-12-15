@@ -1,0 +1,123 @@
+#!/usr/bin/make -f
+
+DEB_HOST_GNU_TYPE ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
+
+DB2MAN = /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/manpages/docbook.xsl
+XP = xsltproc
+XPFLAGS = --nonet
+
+VERSION = 1.0
+UPSTREAM_TGZ = http://ccontrol.ozlabs.org/releases/ccontrol-$(VERSION).tar.bz2
+
+CFLAGS = -Wall \
+	$(shell dpkg-buildflags --get CFLAGS) \
+	$(shell dpkg-buildflags --get CPPFLAGS) \
+	$(shell dpkg-buildflags --get LDFLAGS)
+
+# build, build-arch, build-indep targets
+# ======================================
+
+CONFIGURE_ARGS += --disable-dietlibc
+
+configure:
+config.status: configure
+	dh_testdir
+	CFLAGS="$(CFLAGS) -fdiagnostics-color=always" ./configure \
+		--bindir=/usr/bin \
+		--libdir=/usr/lib/ccontrol \
+		--datadir=/usr/share/ccontrol \
+		--mandir=/usr/share/man \
+		$(CONFIGURE_ARGS)
+
+.PHONY: build-indep
+build-indep: ;
+
+.PHONY: build-arch
+build-arch: build-stamp
+
+build-stamp: config.status gui/gccontrol.1
+	dh_testdir
+	$(MAKE)
+	touch build-stamp
+
+.PHONY: build
+build: build-arch build-indep
+
+# clean target
+# ============
+
+.PHONY: clean
+clean: config.status
+	dh_testdir
+	dh_testroot
+	rm -f build-stamp
+	$(MAKE) distclean
+	rm -f gui/gccontrol.1
+	set -e; for f in $$(find . -name '*.in'); do \
+		rm -f $$(echo $$f | sed 's/\.in$$//'); \
+	done
+	set -e; for f in $$(find . -name '*.gperf'); do \
+		rm -f $$(echo $$f | sed 's/\.gperf$$/.c/'); \
+	done
+	dh_clean
+
+# binary, binary-arch, binary-indep
+# =================================
+
+.PHONY: install
+install: build
+	dh_testdir
+	dh_testroot
+	dh_prep
+	dh_installdirs
+	$(MAKE) install prefix=$(CURDIR)/debian/ccontrol
+	cp $(CURDIR)/gui/gccontrol.1 $(CURDIR)/debian/ccontrol/usr/share/man/man1
+	# Massive compiler linkage copied almost verbatim from ccache packaging,
+	# Copyright 2002 Paul Russell <prussell@debian.org>
+	ln -s ../../bin/ccontrol $(CURDIR)/debian/ccontrol/usr/lib/ccontrol/$(DEB_HOST_GNU_TYPE)-gcc
+	ln -s ../../bin/ccontrol $(CURDIR)/debian/ccontrol/usr/lib/ccontrol/$(DEB_HOST_GNU_TYPE)-g++
+	set -e; for ver in 4.4 4.5 4.6; do \
+		ln -s ../../bin/ccontrol $(CURDIR)/debian/ccontrol/usr/lib/ccontrol/$(DEB_HOST_GNU_TYPE)-gcc-$$ver; \
+		ln -s ../../bin/ccontrol $(CURDIR)/debian/ccontrol/usr/lib/ccontrol/gcc-$$ver; \
+		ln -s ../../bin/ccontrol $(CURDIR)/debian/ccontrol/usr/lib/ccontrol/$(DEB_HOST_GNU_TYPE)-g++-$$ver; \
+		ln -s ../../bin/ccontrol $(CURDIR)/debian/ccontrol/usr/lib/ccontrol/g++-$$ver; \
+	done
+	mv debian/ccontrol/usr/bin/gccontrol.py debian/ccontrol/usr/bin/gccontrol
+
+.PHONY: binary-indep
+binary-indep: ;
+
+.PHONY: binary-arch
+binary-arch: build install
+	dh_testdir
+	dh_testroot
+	dh_installchangelogs CHANGES
+	dh_installdocs
+	dh_installexamples
+	dh_installman
+	dh_link
+	dh_strip
+	dh_compress
+	dh_fixperms
+	dh_installdeb
+	dh_shlibdeps
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+gui/gccontrol.1: debian/gccontrol.1.xml
+	dh_testdir
+	$(XP) -o $@ $(XPFLAGS) $(DB2MAN) $<
+
+.PHONY: binary
+binary: binary-indep binary-arch
+
+# get-orig-source target
+# ======================
+
+here = $(dir $(firstword $(MAKEFILE_LIST)))/..
+upstream_version = $(shell cd $(here) && dpkg-parsechangelog | sed -n -r -e '/^Version: ([0-9.]+).*/ { s//\1/; p; q; }')
+
+.PHONY: get-orig-source
+get-orig-source:
+	sh $(here)/debian/get-orig-source.sh $(upstream_version)

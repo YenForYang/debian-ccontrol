@@ -1,0 +1,16 @@
+Description: Make configure scripts accept CFLAGS with embedded commas.
+Author: Jakub Wilk <jwilk@debian.org>
+Forwarded: no
+Last-Update: 2011-11-14
+
+--- a/configure
++++ b/configure
+@@ -104,7 +104,7 @@
+ 	-e \""s,@DATADIR@,$DATADIR,g\"" \
+ 	-e \""s,@XMLTO@,$XMLTO,g\"" \
+ 	-e \""s,@ASCIIDOC@,$ASCIIDOC,g\"" \
+-	-e \""s,@CFLAGS@,$CFLAGS,g\"" \
++	-e \""s!@CFLAGS@!$CFLAGS!g\"" \
+ 	-e \""s,@VERSION@,$VERSION,g\"" \
+ 	-e \""s,@VERSION_NAME@,$VERSION_NAME,g\"" \
+ 	-e \""s,@VALGRIND@,$VALGRIND,g\"" > config.status

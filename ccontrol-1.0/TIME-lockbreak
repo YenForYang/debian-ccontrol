@@ -1,0 +1,23 @@
+lockbreak + distccmon:
+
+real    2m38.739s
+user    0m58.967s
+sys     0m18.567s
+
+lockbreak:
+
+real    2m42.981s
+user    1m4.416s
+sys     0m19.706s
+
+no lockbreak + distccmon:
+
+real    2m58.364s
+user    1m23.504s
+sys     0m23.019s
+
+no lockbreak:
+real    2m18.197s
+user    1m6.078s
+sys     0m19.869s
+

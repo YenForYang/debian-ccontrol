@@ -1,0 +1,6 @@
+# ARGS hello world
+# NAME /usr/bin/gcc
+# EXEC /usr/bin/ccache /usr/bin/my-gcc hello world
+[*]
+	cc = /usr/bin/my-gcc
+	ccache = /usr/bin/ccache

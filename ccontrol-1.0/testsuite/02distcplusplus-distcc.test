@@ -1,0 +1,9 @@
+# ARGS -c -o hello.o world.c
+# NAME /usr/bin/g++
+# EXEC DISTCC_HOSTS='snab/4 fort/6' /usr/bin/distcc /usr/bin/my-g++ -c -o hello.o world.c
+# Also tests parsing after distcc-hosts, which uses to_eol().
+[*]
+	distcc-hosts = snab/4 fort/6
+	distcc = /usr/bin/distcc
+	c++ = /usr/bin/my-g++
+

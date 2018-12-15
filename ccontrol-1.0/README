@@ -1,0 +1,81 @@
+CCONTROL: Control your compiles
+===============================
+
+Distcc is great, so is ccache.  But they are a PITA to control, as you
+need to change environment variables and/or set CC, add -j to make
+lines, etc.  Explicit control of which compiler you want to use is
+hard.
+
+Enter ccontrol: it takes over invocations of make(1), gcc(1), cc(1),
+g++(1), c++(1) and ld(1), and decides intelligently what to do, based
+on a config file in the .ccontrol subdirectory of your home directory.
+In particular, it allows different options depending on which
+directory it is run in: you can suppress parallel builds for projects
+(or particular make targets) which don't have correctly-working
+Makefiles, use a different compiler, or not use ccache or distcc,
+depending on where you are.
+
+GETTING STARTED
+---------------
+
+I recommend installing dietlibc if you can; the resulting (static)
+binary is smaller and cuts a few percent off compile times.
+
+If you want to install ccontrol in your home directory (eg. ~/bin),
+use "./configure --bindir=$HOME/bin".  Otherwise, a simple
+"./configure" will place the binaries in /usr/local/lib/ccontrol,
+which you will have to put in your PATH.
+
+The type "make" and "make install".  Now run "./ccontrol-init" to
+create a ".ccontrol/default" file.  If you want to avoid probing
+for distcc hosts on the local network, set DISTCC_HOSTS first, eg:
+
+	DISTCC_HOSTS="one two three" ./ccontrol-init
+
+TROUBLESHOOTING
+---------------
+
+Use distccmon-gnome (or "watch distccmon-text") to check if distcc is
+working as expected.  Use "watch ccache -s" to check if ccache is
+working as expected.
+
+If top reveals lots of "cc1", or your load is over 10, make sure your
+Makefiles are invoking "gcc" or "cc" (ie. ccontrol), not the compiler
+directly.
+
+If your configuration file isn't working, try putting "verbose" in the
+section you think should apply, or if all else fails, in the "[*]"
+section.
+
+MORE FUN
+--------
+
+You can read the ccontrol(1) man page and configure your
+.ccontrol/config file, which is usually a symlink to .ccontrol/default.
+
+HACKING
+-------
+
+Feedback on documentation, problems you had, and distribution
+variations gratefully accepted!
+
+Changes to ccontrol code will only be accepted with an accompanying
+testcase or a really good excuse.  To make changes, install the
+following packages:
+
+	asciidoc	(to regenerate the manpages)
+	xmlto		(to regenerate the manpages)
+	gperf		(to regenerate the keyword list)
+
+And I recommend the following:
+	mercurial	(to view and commit changes)
+	valgrind	(to improve testsuite thoroughness)
+
+After your changes, configure with "./configure --enable-debug" and
+run "make check".  Testcases are fairly simple to write: the comments
+at the top control how the test is activated, and the output expected.
+Use "hg bundle" to send a convenient ball of changes back to me for
+merging.
+
+Happy hacking!
+Rusty Russell <rusty@rustcorp.com.au>
